@@ -11,6 +11,8 @@ const {
 // Instantiate the Dialogflow client.
 const app = dialogflow({debug: true});
 
+const port= process.env.PORT || 3000
+
 // Handle the Dialogflow intent named 'favorite color'.
 // The intent collects a parameter named 'color'.
 app.intent('favorite color', (conv, {color}) => {
@@ -91,6 +93,6 @@ server.get('/', function (req, res) {
   res.send("server working")
 })
 
-server.use(bodyParser.json(),app).listen(3000, ()=>{
-  console.log("app listening on port 3000!");
+server.use(bodyParser.json(),app).listen(port, ()=>{
+  console.log("app listening on port: ", port);
 })
