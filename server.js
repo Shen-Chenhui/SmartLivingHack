@@ -1,7 +1,8 @@
 const express = require('express')
 const server = express()
+const axios = require('axios')
 const bodyParser = require('body-parser')
-const fs = require('fs')
+
 const {
   dialogflow,
   BasicCard,
@@ -22,10 +23,10 @@ app.intent('favorite color', (conv, {color}) => {
    // If we collected user name previously, address them by name and use SSML
    // to embed an audio snippet in the response.
    conv.ask(`<speak>${conv.data.userName}, your lucky number is ` +
-     `${luckyNumber}.<audio src="${audioSound}"></audio>` +
+     `${luckyNumber*2+10}.<audio src="${audioSound}"></audio>` +
      `Would you like to hear some fake colors?</speak>`);
  } else {
-   conv.ask(`<speak>Your lucky number is ${luckyNumber + 2}.` +
+   conv.ask(`<speak>Your lucky number is ${luckyNumbe*2+10}.` +
      `<audio src="${audioSound}"></audio>` +
      `Would you like to hear some fake colors?</speak>`);
  }
