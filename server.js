@@ -13,6 +13,7 @@ const {
 const app = dialogflow({debug: true});
 
 const port= process.env.PORT || 3000
+let queueObject={a: 1}
 
 // Handle the Dialogflow intent named 'favorite color'.
 // The intent collects a parameter named 'color'.
@@ -33,11 +34,15 @@ app.intent('favorite color', (conv, {color}) => {
 });
 
 // Handle the Dialogflow intent named 'Default Welcome Intent'.
-app.intent('Default Welcome Intent', (conv) => {
-  conv.ask(new Permission({
-    context: 'Hi there, to get to know you better',
-    permissions: 'NAME'
-  }));
+// app.intent('Default Welcome Intent', (conv) => {
+//   conv.ask(new Permission({
+//     context: 'Hi there, to get to know you better',
+//     permissions: 'NAME'
+//   }));
+// });
+
+app.intent('Default Welcome Intent - yes', (conv) => {
+    conv.ask('It seems that Jurong Branch has ' + queueObject.a + ' people and the least waiting time. Would you like to proceed with booking an appointment at Jurong Branch?');
 });
 
 // Handle the Dialogflow intent named 'actions_intent_PERMISSION'. If user
@@ -84,10 +89,18 @@ app.intent('favorite fake color', (conv, {fakeColor}) => {
 });
 
 
+server.use(bodyParser.json())
+
 server.get('/', function (req, res) {
   res.send("server working")
 })
 
-server.use(bodyParser.json(),app).listen(port, ()=>{
-  console.log("app listening on port: ", port);
+server.post('/sendQueue', function(req,res) {
+  queueObject = req.body.queue
+  console.log(req.body)
+  res.send(queueObject.a)
+})
+
+server.use(bodyParser.json(), app).listen(port, ()=>{
+  console.log("app listening on port: ", port)
 })
