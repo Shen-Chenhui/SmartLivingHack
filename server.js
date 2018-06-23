@@ -14,9 +14,12 @@ const app = dialogflow({debug: true});
 
 const port= process.env.PORT || 3000
 let queueObject= {
-  a: 1,
+  a: 10,
   b: 10,
-  c: 11
+  c: 11,
+  d: 9,
+  e: 9,
+  f: 9
 }
 
 app.intent('Default Welcome Intent - yes', (conv) => {
@@ -24,18 +27,43 @@ app.intent('Default Welcome Intent - yes', (conv) => {
     let prompt = ""
     let leastNumber = queueObject[keyArr[0]]
     let leastBranch = keyArr[0]
+    let ifEqual = false
+    let leastBranches = []
     for(var i = 1; i < keyArr.length; i++){
       if(leastNumber > queueObject[keyArr[i]]){
         leastNumber = queueObject[keyArr[i]]
         leastBranch = keyArr[i]
+        if(ifEqual){ // clear the several leastBranches before this
+          ifEqual = false
+          leastBranches = []
+        }
+      }
+      if(leastNumber === queueObject[keyArr[i]]){
+        ifEqual = true
+        if(!leastBranches.length){ // save both branches
+          leastBranches.push(leastBranch)
+          leastBranches.push(keyArr[i])
+        } else {
+          // if previous branches already saved, just add this one
+          leastBranches.push(keyArr[i])
+        }
       }
     }
     keyArr.forEach(elem => {
-      prompt = prompt.concat("branch "+elem+" has "+queueObject[elem]+" people waiting, ")
+      prompt = prompt.concat("branch "+elem+" has "+queueObject[elem]+" people, ")
     })
-    prompt = prompt.concat("branch "+leastBranch+ " has the least waiting time.")
+    if(ifEqual){
+      prompt = prompt.concat("branches ")
+      leastBranches.forEach(elem => {
+        prompt = prompt.concat(elem+" ")
+      })
+      prompt = prompt.concat("all have the same waiting time. But branch "+leastBranches[1]+" is neareast to your home.")
+    }else{
+      prompt = prompt.concat("branch "+leastBranch+ " has the least waiting time.")
+    }
     console.log(prompt)
-    conv.ask('It seems that ' + prompt + '. Would you like to proceed with booking an appointment at Jurong Branch?');
+    selecetedBranch = ifEqual? leastBranches[1] : leastBranch
+    conv.ask('It seems that ' + prompt + ' Would you like to proceed with booking an appointment at ' + selecetedBranch+'?');
 });
 
 
