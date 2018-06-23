@@ -18,23 +18,17 @@ const port= process.env.PORT || 3000
 app.intent('favorite color', (conv, {color}) => {
  const luckyNumber = color.length;
  const audioSound = 'https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg';
- axios.get("http://localhost:3000/getNumber")
- .then(response =>{
-   if (conv.data.userName) {
-     // If we collected user name previously, address them by name and use SSML
-     // to embed an audio snippet in the response.
-     conv.ask(`<speak>${conv.data.userName}, your lucky number is ` +
-       `${resp.data}.<audio src="${audioSound}"></audio>` +
-       `Would you like to hear some fake colors?</speak>`);
-     } else {
-       conv.ask(`<speak>Your lucky number is ${resp.data}.` +
-         `<audio src="${audioSound}"></audio>` +
-         `Would you like to hear some fake colors?</speak>`);
-       }
- })
- .catch(err => {
-     conv.close('The conversation ended due to Internal Server Error')
- })
+ if (conv.data.userName) {
+   // If we collected user name previously, address them by name and use SSML
+   // to embed an audio snippet in the response.
+   conv.ask(`<speak>${conv.data.userName}, your lucky number is ` +
+     `${luckyNumber}.<audio src="${audioSound}"></audio>` +
+     `Would you like to hear some fake colors?</speak>`);
+ } else {
+   conv.ask(`<speak>Your lucky number is ${luckyNumber + 2}.` +
+     `<audio src="${audioSound}"></audio>` +
+     `Would you like to hear some fake colors?</speak>`);
+ }
 });
 
 // Handle the Dialogflow intent named 'Default Welcome Intent'.
