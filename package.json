@@ -1,0 +1,27 @@
+{
+  "name": "smartlivinghack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shen-Chenhui/SmartLivingHack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shen-Chenhui/SmartLivingHack/issues"
+  },
+  "homepage": "https://github.com/Shen-Chenhui/SmartLivingHack#readme",
+  "dependencies": {
+    "actions-on-google": "^2.2.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "firebase-functions": "^1.1.0",
+    "google-assistant": "^0.5.2"
+  }
+}
